@@ -1,6 +1,12 @@
 {% extends "blog/base.html" %}
 {% load templatetags %}
 {% block content %}
+	<script type="text/javascript">
+		$(document).ready(function() {
+		    let element = document.getElementById('sort-selector');
+		    element.value = '{{ sort_type }}';
+		});
+	</script>
 	<div id="post-list" class="infinite-container">
 		{% for post in posts %}
 			<div class="infinite-item">
@@ -14,7 +20,7 @@
 		</div>
 	</div>
 	{% if page_obj.has_next %}
-		<a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}">next</a>
+		<a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}&sort_type={{ sort_type }}">next</a>
 	{% endif %}
 {% endblock content %}
 {% block taskbar %}

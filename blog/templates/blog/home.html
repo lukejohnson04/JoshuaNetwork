@@ -2,20 +2,9 @@
 {% load templatetags %}
 {% block content %}
 	<script type="text/javascript">
-		$(document).on("change", "#sort-dropdown", function() {
-			var dropdown = document.getElementById("sort-dropdown");
-			var sort_type = $(dropdown).find(":selected").val();
-
-			$.ajax({
-				type: 'GET',
-				url: "{% url 'change-sort' %}",
-				data: {"sort_type": sort_type},
-				// Gets correctly sorted queryset from db
-				success: function(response) {
-					// Delete old HTML of posts, redo it
-					console.log("Sort type changed");
-				}
-			})
+		$(document).ready(function() {
+		    let element = document.getElementById('sort-selector');
+		    element.value = '{{ sort_type }}';
 		});
 	</script>
 	<div id="post-list" class="infinite-container">
@@ -31,7 +20,7 @@
 		</div>
 	</div>
 	{% if page_obj.has_next %}
-		<a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}">next</a>
+		<a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}&sort_type={{ sort_type }}">next</a>
 	{% endif %}
 {% endblock content %}
 {% block taskbar %}
@@ -46,12 +35,21 @@
 			<li class="list-group-item list-group-item-light">Random prompt: <b>Black Lives Matter</b></li>
 			<li class="list-group-item list-group-item-light">Daily character limit: <b>27</b></li>
 			<li class="list-group-item list-group-item-light">Sort by
-				<select id='sort-dropdown'>
-    				<option value='hot'>The Joshiest</option>
-    				<option value='new'>New</option>
-    				<option value='top'>JoshNet Greatest JoshHits</option>
-    				<option value='controversial'>Conteroversial</option>
-				</select>
+				<!--
+				<form method="get" action="{% url 'blog-home' %}">
+					<p>Sort type: <input type="text" value={{sort_type}} name="sort_type"/></p>
+					<p><input type="submit" name="submit" value="submit"/></p>
+				</form>
+				-->
+
+				<form method="get" action="{% url 'blog-home' %}">
+					<select id="sort-selector" onchange="form.submit();" name="sort_type">
+	    				<option value='hot'>The Joshiest</option>
+	    				<option value='new'>New</option>
+	    				<option value='top'>JoshNet Greatest JoshHits</option>
+	    				<option value='controversial'>Conteroversial</option>
+					</select>
+				</form>
 			</li>
 		</ul>
 		<br>

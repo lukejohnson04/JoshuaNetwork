@@ -6,6 +6,8 @@ from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
 from django.urls import reverse
+from django.db.models import Count
+
 from .models import Post, Comment
 from users.models import Profile, Notification
 from .forms import CommentForm
@@ -100,45 +102,62 @@ class PostListView(ListView):
 	model = Post
 	template_name = 'blog/home.html'
 	context_object_name = 'posts'
-	ordering = ['-date_posted']
 	paginate_by = 5
 
-# Step 1: get infinite scrolling with function based view
-# Step 2: get infinite scrolling with custom post listing
+	def get_queryset(self):
+		sort_type = self.request.GET.get('sort_type', 'new')
 
-def feed(request):
-	posts = Post.objects.all().order_by("-date_posted")
-	context = {
-		"posts": posts,
-	}
-	return render(request, 'blog/home.html', context)
+		if sort_type == 'hot' or sort_type == 'controversial':
+			if sort_type == 'hot':
+				ordering = '-karma'
+			else:
+				ordering = 'karma'
+		else:
+			ordering = '-date_posted'
+
+		return get_post_set(sort_type)
+
+	def get_context_data(self, **kwargs):
+		context = super(PostListView, self).get_context_data(**kwargs)
+		context['sort_type'] = self.request.GET.get('sort_type', 'new')
+		return context
+
+def get_post_set(ordering, n_author=None):
+	if ordering == "hot":
+		sort_type = "-karma"
+	elif ordering == "controversial":
+		sort_type = "karma"
+	elif ordering == "new":
+		sort_type = "-date_posted"
+	elif ordering == "old":
+		sort_type = "date_posted"
+
+	base_set = Post.objects
+	if n_author != None:
+		base_set = base_set.filter(author=n_author)
+	if sort_type == "karma" or sort_type == "-karma":
+		base_set = base_set.annotate(karma=Count('likes')-Count('dislikes'))
+	return base_set.order_by(sort_type)
 
 class UserPostListView(ListView):
 	model = Post
 	template_name = 'blog/user_posts.html'
 	context_object_name = 'posts'
-	ordering = ['-likes']
+	ordering = ['-date_posted']
 	paginate_by = 5
+
+	def get_queryset(self):
+		user = get_object_or_404(User, username=self.kwargs.get('username'))
+		sort_type = self.request.GET.get('sort_type', 'new')
+		return get_post_set(sort_type, user)
 
 	def get_context_data(self, **kwargs):
 		context = super(UserPostListView, self).get_context_data(**kwargs)
 		user = get_object_or_404(User, username=self.kwargs.get('username'))
+		context['sort_type'] = self.request.GET.get('sort_type', 'new')
 		context['user_of_page'] = user
 		
 		return context
-
-	def get_queryset(self):
-		user = get_object_or_404(User, username=self.kwargs.get('username'))
-		return Post.objects.filter(author=user).order_by('-date_posted')
-
-def change_post_sort(request):
-	is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
-	if is_ajax and request.method == "GET":
-		# ajax success
-		sort_type = request.GET.get("sort_type")
-		print(sort_type)
-		return JsonResponse({"valid": True}, status=200)
-	return JsonResponse({}, status=400)
 
 def get_post_list(n_sort_type=None, n_author=None):
 	sort_type = n_sort_type

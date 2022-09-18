@@ -18,6 +18,16 @@
 						<button class="follow-btn btn btn-primary btn-sm" user-pk="{{ user_to_render.pk }}">{% if is_following %}Unfollow{% else %}Follow{% endif %}</button>
 					{% endif %}
 				</li>
+				<li class="list-group-item list-group-item-light">Sort by
+					<form method="get" action="{% url 'user-posts' user.username %}">
+						<select id="sort-selector" onchange="form.submit();" name="sort_type">
+		    				<option value='hot'>The Joshiest</option>
+		    				<option value='new'>New</option>
+		    				<option value='top'>JoshNet Greatest JoshHits</option>
+		    				<option value='controversial'>Conteroversial</option>
+						</select>
+					</form>
+				</li>
 			</ul>
 		</p>
 	</div>
