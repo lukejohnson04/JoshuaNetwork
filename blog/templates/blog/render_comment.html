@@ -1,0 +1,33 @@
+{% load templatetags %}
+<article class="media{% if comment.parent %} nested-comment {% else %} head-comment{% endif %}">
+	{% if not comment.parent %}
+		<img class="rounded-circle post-img" src="{{ comment.author.profile.image.url }}">
+	{% endif %}
+	<div style="width: 100%">
+		<div class="article-metadata">
+			{% if comment.parent %}
+				<img class="rounded-circle nested-reply-img" src="{{ comment.author.profile.image.url }}">
+			{% endif %}
+			<a class="mr-2" href="{% url 'user-posts' comment.author.username %}">{{ comment.author }}</a>
+	 		<small class="text-muted">{{ comment.date_posted|date:"F d, Y" }}</small>
+			{% if comment.author == user %}
+				<a style="display:inline; float:right; font-size: 0.95em" href="javascript:void(0)" class="text-danger" onclick="deleteComment(this)" data-pk="{{ comment.pk }}">Delete</a>
+			{% endif %}
+	    </div>
+
+	    <p style="margin-bottom: 0px">{{ comment.content }}</p>
+		<div style="display:flex">
+			<a href="javascript:void(0)" class="reply-btn text-muted btn-sm mt-1 mb-1" style="float: right; margin-left: auto; padding-left: 0em; padding-bottom: 0.5em" data-pk="{{ comment.pk }}">Reply</a>
+		</div>
+		<div class="form-outline reply-box" style="display:none;">
+			{% csrf_token %}
+			<textarea class="form-control" id="comment-field-{{ comment.pk }}" rows="4"></textarea>
+  			<button class="btn btn-outline-info" onclick="postComment(this)" data-pk="{{ comment.post.pk }}" parent-comment="{{ comment.pk }}">Post</button>
+  		</div>
+  		<div id="comment-replies-{{ comment.pk }}">
+			{% for reply in comment.replies.all %}
+				{% render_comment reply user %}
+			{% endfor %}
+		</div>
+	</div>
+</article>

@@ -1,0 +1,24 @@
+<div class="col-md-4">
+	<div class="content-section">
+		<div style="padding-top:2%; padding-bottom: 5%;" class="media-body">
+			<img style="display:inline" class="rounded-circle article-img" src="{{ user_to_render.profile.image.url }}">
+			<h2 style="display:inline; position: relative; top:0.3em"><a class="mr-2 article-title" href="{% url 'user-posts' user_to_render.username %}">{{ user_to_render.username }}</a></h2>
+		</div>
+		<p class='text-muted'>{{ user_to_render.profile.bio }}
+			<ul class="list-group">
+				<li class="list-group-item list-group-item-light" id="follower-count-{{ user_to_render.pk }}">{{ user_to_render.profile.followers.count }} Joshowers</li>
+				<li class="list-group-item list-group-item-light">{{ user_to_render.following.count }} Joshowing</li>
+				<li class="list-group-item list-group-item-light">Favorite food: Pizza</li>
+				<li class="list-group-item list-group-item-light"><a href="https://www.fortnite.com">CLICK HERE FOR FUN GAMES!!!</a></li>
+				<li class="list-group-item list-group-item-light">
+					{% if user_to_render == user %}
+						<a class="nav-item nav-link" href="{% url 'profile' %}">Edit Profile</a>
+					{% else %}
+						{% csrf_token %}
+						<button class="follow-btn btn btn-primary btn-sm" user-pk="{{ user_to_render.pk }}">{% if is_following %}Unfollow{% else %}Follow{% endif %}</button>
+					{% endif %}
+				</li>
+			</ul>
+		</p>
+	</div>
+</div>

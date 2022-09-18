@@ -1,0 +1,60 @@
+{% extends "blog/base.html" %}
+{% load templatetags %}
+{% block content %}
+	<script type="text/javascript">
+		$(document).on("change", "#sort-dropdown", function() {
+			var dropdown = document.getElementById("sort-dropdown");
+			var sort_type = $(dropdown).find(":selected").val();
+
+			$.ajax({
+				type: 'GET',
+				url: "{% url 'change-sort' %}",
+				data: {"sort_type": sort_type},
+				// Gets correctly sorted queryset from db
+				success: function(response) {
+					// Delete old HTML of posts, redo it
+					console.log("Sort type changed");
+				}
+			})
+		});
+	</script>
+	<div id="post-list" class="infinite-container">
+		{% for post in posts %}
+			<div class="infinite-item">
+				{% render_post_func post user %}
+			</div>
+		{% endfor %}
+	</div>
+	<div class="d-flex d-none position-fixed loading" style="top:35vh; left:46vw">
+		<div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+		  <span class="sr-only">Loading...</span>
+		</div>
+	</div>
+	{% if page_obj.has_next %}
+		<a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}">next</a>
+	{% endif %}
+{% endblock content %}
+{% block taskbar %}
+<div class="col-md-4">
+	<div class="content-section" style="padding-top:5%">
+		<h4 style="display:inline">Need some awesome conversation starters??? Try these!!!</h4>
+		<br><br>
+		<ul class="list-group">
+			<li class="list-group-item list-group-item-light">Prompt of the hour: <b>Modern usage of the word "stan"</b></li>
+			<li class="list-group-item list-group-item-light">Prompt of the day: <b>The War on Drugs</b></li>
+			<li class="list-group-item list-group-item-light">Prompt of the week: <b>Taco Tuesdays vs Pizza Friday</b></li>
+			<li class="list-group-item list-group-item-light">Random prompt: <b>Black Lives Matter</b></li>
+			<li class="list-group-item list-group-item-light">Daily character limit: <b>27</b></li>
+			<li class="list-group-item list-group-item-light">Sort by
+				<select id='sort-dropdown'>
+    				<option value='hot'>The Joshiest</option>
+    				<option value='new'>New</option>
+    				<option value='top'>JoshNet Greatest JoshHits</option>
+    				<option value='controversial'>Conteroversial</option>
+				</select>
+			</li>
+		</ul>
+		<br>
+	</div>
+</div>
+{% endblock taskbar %}

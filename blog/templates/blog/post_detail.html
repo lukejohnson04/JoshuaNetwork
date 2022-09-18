@@ -1,0 +1,50 @@
+{% extends "blog/base.html" %}
+{% load templatetags %}
+{% block content %}
+	<!-- Don't actually need the user capture lol -->
+	{% render_post_func object user %}
+	<!-- Move this into the actual post somehow -->
+	{% if object.author == user %}
+		<div style="display:inline; float:right">
+			<a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' post.id %}">Edit</a>
+			<a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' post.id %}">Delete</a>
+		</div>
+	{% endif %}
+	<div>
+		<!--	
+		<div style="display:inline">
+			{% if user in post.likes %}
+				you'e ve liked!
+            	<a class="btn-upjoshua" href="javascript:void(0)" onclick="likePost(this)" data-pk="{{ post.pk }}" data-likes="{{ post.likes }}" class="d-inlike-block liked-post">
+            {% else %}
+	            not liked!
+            	<a class="btn-downjoshua" href="javascript:void(0)" onclick="likePost(this)" data-pk="{{ post.pk }}" data-likes="{{ post.likes }}" class="d-inlike-block text-muted">
+            {% endif %}
+            <strong id="likeCount">{{ post.likes.count }}</strong>
+	
+	        </a>
+		</div>
+		-->
+		<div class="form-outline">
+		 	<label class="form-label">Post Comment</label>
+			{% csrf_token %}
+			<textarea class="form-control" id="comment-field" rows="4"></textarea>
+  			<button class="btn btn-outline-info" onclick="postComment(this)" data-pk="{{ post.pk }}" parent-comment="">Post</button>
+		</div>
+	</div>
+	<br>
+	<!--
+	-->
+	<div class="media-body">
+		<h1 style="color:black">Comments</h1>
+		<div id="comment-section">
+			{% block comments %}
+				{% for comment in top_comments %}
+					{% render_comment comment user %}
+				{% empty %}
+					<p>There are no comments yet.</p>
+				{% endfor %}
+			{% endblock comments %}
+		</div>
+	</div>
+{% endblock content %}
