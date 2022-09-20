@@ -8,6 +8,9 @@ from django.core.paginator import Paginator
 from django.urls import reverse
 from django.db.models import Count
 
+from django.utils import timezone
+from math import log
+
 from .models import Post, Comment
 from users.models import Profile, Notification
 from .forms import CommentForm
@@ -123,7 +126,7 @@ class PostListView(ListView):
 		return context
 
 def get_post_set(ordering, n_author=None):
-	if ordering == "hot":
+	if ordering == "top":
 		sort_type = "-karma"
 	elif ordering == "controversial":
 		sort_type = "karma"
@@ -131,6 +134,25 @@ def get_post_set(ordering, n_author=None):
 		sort_type = "-date_posted"
 	elif ordering == "old":
 		sort_type = "date_posted"
+	elif ordering == "hot":
+		# trending alg here
+		post_dict = {}
+		for post in Post.objects.all():
+			# trending alg:
+			# (likes*0.5 + unique commenters) * (1/days_ago^2)
+			# just do number of comments for now, can do unique comments later
+			days_since_posted = (timezone.now() - post.date_posted).days
+			if days_since_posted <= 1:
+				date_weight = 1
+			else:
+				date_weight = min(1, -log((timezone.now() - post.date_posted).days) + 1)
+			sort_weight = (1 + (post.total_likes()*0.5) + post.comments.count()) * date_weight
+			post_dict[post.pk] = sort_weight
+		post_dict = dict(sorted(post_dict.items(), reverse=True, key=lambda item: item[1]))
+		post_list = []
+		for post in post_dict.keys():
+			post_list.append(Post.objects.get(pk=post))
+		return post_list
 
 	base_set = Post.objects
 	if n_author != None:

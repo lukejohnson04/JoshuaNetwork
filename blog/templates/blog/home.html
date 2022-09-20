@@ -1,5 +1,6 @@
 {% extends "blog/base.html" %}
 {% load templatetags %}
+{% load humanize %}
 {% block content %}
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -9,9 +10,7 @@
 	</script>
 	<div id="post-list" class="infinite-container">
 		{% for post in posts %}
-			<div class="infinite-item">
-				{% render_post_func post user %}
-			</div>
+			{% render_post_func post user %}
 		{% endfor %}
 	</div>
 	<div class="d-flex d-none position-fixed loading" style="top:35vh; left:46vw">

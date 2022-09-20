@@ -36,9 +36,10 @@ ul {
 .content-section {
   background: rgba(245,255,245,0.9);
   border: 2px solid #dddddd;
-  padding: 1em 1em;
+  padding: 0.75em 0.5em;
+  padding-bottom: 2em;
   border-radius: 3px;
-  margin-bottom: 1em;
+  margin-bottom: 0.75em;
 }
 
 .head-comment {
@@ -74,6 +75,7 @@ a.article-title:hover {
 
 .article-content {
   white-space: pre-line;
+  line-height: 1.4;
 }
 
 .post-img {
@@ -88,8 +90,15 @@ a.article-title:hover {
 }
 
 .article-metadata {
-  padding-bottom: 1px;
-  margin-bottom: 4px;
+  padding: 0.25em;
+}
+
+.article-metadata p {
+  margin-bottom: 0.5em;
+}
+
+.article-metadata a {
+  font-size: 1.125em;
 }
 
 .article-metadata a:hover {
@@ -108,6 +117,10 @@ a.article-title:hover {
   width: 125px;
   margin-right: 20px;
   margin-bottom: 16px;
+}
+
+.post-title {
+  padding-bottom: 0.25em;
 }
 
 .account-heading {
@@ -174,11 +187,26 @@ a.article-title:hover {
   color:black;
 }
 
+.post-body {
+  padding: 0.25em;
+  width:100%;
+}
+
+.post-bottom-bar {
+  bottom: 0px;
+  position: absolute;
+  right: 0px;
+  padding: 0.75em;
+}
 
 .post-left-bar img {
   display:block;
 }
 
+.post-left-bar {
+  justify-content: center;
+  padding: 0.5em;
+}
 .downjoshua {
 
 }

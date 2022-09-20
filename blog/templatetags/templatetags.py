@@ -1,5 +1,6 @@
 from django import template
 from users.models import Notification, Profile
+from django.template.defaultfilters import stringfilter
 
 register = template.Library()
 
@@ -28,3 +29,9 @@ def show_notifications(context):
 @register.inclusion_tag('blog/render_comment.html')
 def render_comment(comment, user):
 	return {'comment': comment, 'user': user}
+
+@register.filter
+@stringfilter
+def upto(value, delimiter=None):
+    return (value.split(delimiter)[0])
+upto.is_safe = True

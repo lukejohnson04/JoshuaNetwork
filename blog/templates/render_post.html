@@ -1,5 +1,6 @@
-<article class="media content-section">
-	<div class="post-left-bar" style="justify-content: center; padding-left:1%; padding-right: 1%;">
+{% load templatetags %}
+<article class="media content-section infinite-item" style="position:relative;">
+	<div class="post-left-bar">
 		<img class="rounded-circle post-img" style=" margin:auto" src="{{ post.author.profile.image.url }}">
 		<div style="padding-top: 0em; text-align: center; transform: scale(0.75)" class="like-div">
         	<a class="btn-upjoshua" href="javascript:void(0)" onclick="likePost(this, 1)" data-pk="{{ post.pk }}" data-likes="{{ post.total_likes }}">
@@ -19,25 +20,26 @@
 			</a>
 		</div>
 	</div>
-	<div class="media-body" style="display:inline">
+	<div class="media-body post-body">
 		<div class="article-metadata">
-			<a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
-			<br>
-	 		<small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-	 		<!--
-	 		{% if post.author == user %}
-		 		<div>
-		 			<a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' post.id %}">Update</a>
-		 			<a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' post.id %}">Delete</a>
-		 		</div>
-	 		{% endif %}	
-	 		-->
+			<a href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+	 		<p class="text-muted">{{ post.date_posted | timesince | upto:','}} ago</p>
 	    </div>
-		<h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+		<h2 class="post-title"><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
 		<p class="article-content">{{ post.content }}</p>
 		{% if post.image %}
 			<img style="max-width: 100%; min-width: 60%; height: auto" src="{{ post.image.url }}">
 			<br><br>
 		{% endif %}
+	</div>
+	<div class="post-bottom-bar">
+		{% if post.author == user %}
+			<a class="link-danger" href="{% url 'post-delete' post.id %}">Delete</a>
+		{% endif %}
+		<a href="{% url 'post-detail' post.id %}" class="text-muted">Comments
+			{% if post.comments.count > 0 %}
+				 ({{ post.comments.count }})
+			{% endif %}
+		</a>
 	</div>
 </article>
