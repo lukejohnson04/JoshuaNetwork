@@ -34,7 +34,7 @@
 </head>
 <body>
 	<header class="site-header">
-	  <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top py-3">
+	  <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top py-2">
 	    <div class="container" style="min-width:98%">
 	      <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">Joshua Network</a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,10 +60,11 @@
 	      </div>
 	    </div>
 	  </nav>
+	  {% block header %}{% endblock %}
 	</header>
-	<main role="main" class="container" style="min-width: 55%;">
-	  <div class="row">
-	    <div class="col-md-8">
+	<main role="main" class="container" style="min-width: 55%; max-width: 75%;">
+	  <div class="row" style="">
+	    <div class="col-md-8" style="width: fit-content; max-width: 70%;">
 	      {% if messages %}
 	        {% for message in messages %}
 	          <div class="alert alert-{{ message.tags }}">
@@ -176,7 +177,9 @@
 		}
 
 		$(document).on("click", ".reply-btn", function() {
-			$(this).parent().next('.reply-box').toggle()
+			let reply_box = $(this).parent().next('.reply-box')
+			reply_box.toggle()
+			$('.reply-box').not(reply_box).hide()
 		});
 
 		$(document).on('click', '.follow-btn', function() {

@@ -1,34 +1,34 @@
-<div class="col-md-4">
+<div class="col-md-4" style="min-width: 32%;">
 	<div class="content-section">
-		<div style="padding-top:2%; padding-bottom: 5%;" class="media-body">
-			<img style="display:inline" class="rounded-circle article-img" src="{{ user_to_render.profile.image.url }}">
-			<h2 style="display:inline; position: relative; top:0.3em"><a class="mr-2 article-title" href="{% url 'user-posts' user_to_render.username %}">{{ user_to_render.username }}</a></h2>
+		<div style="padding-top:2%; padding-bottom: 5%; margin-left: 0.9em; margin-right: 0.5em" class="media-body">
+			<img style="display:inline; max-width: 30%; margin: auto;" class="rounded-circle" src="{{ user_to_render.profile.image.url }}">
+			<h3 style="display:inline; position: relative; top:0.3em"><a class="mr-2 article-title" href="{% url 'user-posts' user_to_render.username %}">{{ user_to_render.username }}</a></h2>
 		</div>
-		<p class='text-muted'>{{ user_to_render.profile.bio }}
-			<ul class="list-group">
-				<li class="list-group-item list-group-item-light" id="follower-count-{{ user_to_render.pk }}">{{ user_to_render.profile.followers.count }} Joshowers</li>
-				<li class="list-group-item list-group-item-light">{{ user_to_render.following.count }} Joshowing</li>
-				<li class="list-group-item list-group-item-light">Favorite food: Pizza</li>
-				<li class="list-group-item list-group-item-light"><a href="https://www.fortnite.com">CLICK HERE FOR FUN GAMES!!!</a></li>
-				<li class="list-group-item list-group-item-light">
-					{% if user_to_render == user %}
-						<a class="nav-item nav-link" href="{% url 'profile' %}">Edit Profile</a>
-					{% else %}
-						{% csrf_token %}
-						<button class="follow-btn btn btn-primary btn-sm" user-pk="{{ user_to_render.pk }}">{% if is_following %}Unfollow{% else %}Follow{% endif %}</button>
-					{% endif %}
-				</li>
-				<li class="list-group-item list-group-item-light">Sort by
-					<form method="get" action="{% url 'user-posts' user.username %}">
+		<p style="margin-left:0.5em; margin-right: 0.5em;" class='text-muted'>{{ user_to_render.profile.bio }}</p>
+		<ul class="list-group">
+			<li class="list-group-item list-group-item-light" id="follower-count-{{ user_to_render.pk }}">{{ user_to_render.profile.followers.count }} Joshowers</li>
+			<li class="list-group-item list-group-item-light">{{ user_to_render.following.count }} Joshowing</li>
+			<li class="list-group-item list-group-item-light">
+				{% if user_to_render == user %}
+					<a class="nav-item" href="{% url 'profile' %}">Edit Profile</a>
+				{% else %}
+					{% csrf_token %}
+					<button class="follow-btn btn btn-primary btn-sm" user-pk="{{ user_to_render.pk }}">{% if is_following %}Unfollow{% else %}Follow{% endif %}</button>
+				{% endif %}
+			</li>
+			<li class="list-group-item">
+				<form method="get" class="form-inline" action="{% url 'user-posts' user.username %}">
+					<div class="form-group" style="width: 100%">
+						<p class="text-muted" style="margin-bottom: 0px">Sort by&nbsp;</p>
 						<select id="sort-selector" onchange="form.submit();" name="sort_type">
-		    				<option value='hot'>The Joshiest</option>
-		    				<option value='new'>New</option>
-		    				<option value='top'>JoshNet Greatest JoshHits</option>
-		    				<option value='controversial'>Conteroversial</option>
+							<option value='hot'>The Joshiest</option>
+							<option value='new'>New</option>
+							<option value='top'>Greatest JoshHits</option>
+							<option value='controversial'>Conteroversial</option>
 						</select>
-					</form>
-				</li>
-			</ul>
-		</p>
+					</div>
+				</form>
+			</li>
+		</ul>
 	</div>
 </div>

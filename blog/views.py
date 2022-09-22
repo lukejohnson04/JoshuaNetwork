@@ -26,7 +26,8 @@ def home(request):
 def hall_of_shame(request):
 	shame_user = Profile.objects.order_by('followers').first().user
 	# Make this the post with lowest difference between likes and dislikes
-	shame_post = Post.objects.order_by('-likes').first()
+	posts = Post.objects.annotate(karma=Count('likes')-Count('dislikes'))
+	shame_post = posts.order_by('karma').first()
 	context = {
 		'shame_user': shame_user,
 		'shame_post': shame_post
