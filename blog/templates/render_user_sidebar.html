@@ -1,10 +1,12 @@
-<div class="col container-fluid">
+<div class="col">
 	<div class="content-section">
-		<div style="padding-top:2%; padding-bottom: 5%; margin-left: 0.9em; margin-right: 0.5em" class="media-body">
-			<img style="display:inline; max-width: 30%; margin: auto;" class="rounded-circle" src="{{ user_to_render.profile.image.url }}">
-			<h3 style="display:inline; position: relative; top:0.3em"><a class="mr-2 article-title" href="{% url 'user-posts' user_to_render.username %}">{{ user_to_render.username }}</a></h2>
+		<div>
+			<div style="padding-top:2%; padding-bottom: 5%; margin-left: 0.9em; margin-right: 0.5em" class="media-body">
+				<img style="width: 30%; display: inline-block; margin: auto;" class="rounded-circle" src="{{ user_to_render.profile.image.url }}">
+				<h3 style="display: inline-block; position: relative; top:0.3em"><a class="mr-2 article-title" href="{% url 'user-posts' user_to_render.username %}">{{ user_to_render.username }}</a></h2>
+			</div>
+			<p style="margin-left:0.5em; margin-right: 0.5em;" class='text-muted'>{{ user_to_render.profile.bio }}</p>
 		</div>
-		<p style="margin-left:0.5em; margin-right: 0.5em;" class='text-muted'>{{ user_to_render.profile.bio }}</p>
 		<ul class="list-group">
 			<li class="list-group-item list-group-item-light" id="follower-count-{{ user_to_render.pk }}">{{ user_to_render.profile.followers.count }} Joshowers</li>
 			<li class="list-group-item list-group-item-light">{{ user_to_render.following.count }} Joshowing</li>

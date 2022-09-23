@@ -5,9 +5,9 @@
 		<div style="padding-top: 0em; text-align: center; transform: scale(0.75)" class="like-div">
         	<a class="btn-upjoshua" href="javascript:void(0)" onclick="likePost(this, 1)" data-pk="{{ post.pk }}" data-likes="{{ post.total_likes }}">
             {% if karma == 1 %}
-				<img src="/media/ui/upjoshua.png" name="upjoshua" style="display:block; margin: auto">
+				<img src="/media/ui/upjoshua.png" name="upjoshua" style="margin: auto">
 			{% else %}
-				<img src="/media/ui/upjoshua_empty.png" name="upjoshua" style="display:block; margin: auto">				
+				<img src="/media/ui/upjoshua_empty.png" name="upjoshua" style="margin: auto">				
 			{% endif %}
 			</a>
             <strong id="likeCount">{{ post.total_likes }}</strong>

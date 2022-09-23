@@ -31,7 +31,17 @@ class Comment(models.Model):
 	date_posted = models.DateTimeField(default=timezone.now)
 	author = models.ForeignKey(User, on_delete=models.CASCADE)
 	# every comment has one parent, but can have many replies
-	parent = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.CASCADE)
+	parent = models.ForeignKey('self', null=True, blank=True, related_name="replies", on_delete=models.CASCADE)
+	responding_to = models.OneToOneField('self', null=True, blank=True, on_delete=models.SET_NULL)
+
+	likes = models.ManyToManyField(User, related_name='liked_comments', blank=True)
+	dislikes = models.ManyToManyField(User, related_name='disliked_comments', blank=True)
+
+	def total_likes(self):
+		return self.likes.count() - self.dislikes.count()
+
+	def has_liked(self, user_id):
+		return self.likes.filter(id=user_id).exists()
 
 	class Meta:
     	# sort comments in chronological order by default
