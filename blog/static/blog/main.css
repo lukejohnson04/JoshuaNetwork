@@ -183,7 +183,7 @@ a.article-title:hover {
 }
 
 * {
-  font-family: "Comic Sadns MS", "Comidc Sans", cursive;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
   color:black;
 }
 
@@ -207,10 +207,10 @@ a.article-title:hover {
   justify-content: center;
   padding: 0.5em;
 }
-.downjoshua {
 
-}
-
-.upjoshua {
-
+.hos-header {
+  text-align: center;
+  color: white;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 2px 2px 0 #000;
+  transform: scale(3, 2.5);
 }

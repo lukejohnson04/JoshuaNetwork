@@ -34,7 +34,7 @@
 	</div>
 	<div class="post-bottom-bar">
 		{% if post.author == user %}
-			<a class="link-danger" href="{% url 'post-delete' post.id %}">Delete</a>
+			<a class="link-danger" href="{% url 'post-delete' post.id %}">Delete&nbsp;</a>
 		{% endif %}
 		<a href="{% url 'post-detail' post.id %}" class="text-muted">Comments
 			{% if post.comments.count > 0 %}

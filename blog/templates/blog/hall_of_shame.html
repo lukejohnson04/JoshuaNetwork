@@ -1,5 +1,10 @@
 {% extends "blog/base.html" %}
 {% load templatetags %}
+{% block header %}
+	<div style="padding-top: 10px; padding-bottom: 40px; width: 100%;">
+		<h1 class="hos-header">HALL OF SHAME</h1>
+	</div>
+{% endblock header %}
 {% block content %}
 	{% render_post_func shame_post shame_user %}
 {% endblock content %}
