@@ -62,9 +62,9 @@
 	  </nav>
 	  {% block header %}{% endblock %}
 	</header>
-	<main role="main" class="container" style="min-width: 55%; max-width: 75%;">
+	<main role="main" class="container" style="min-width: 55%;">
 	  <div class="row" style="">
-	    <div class="col-md-8" style="width: fit-content; max-width: 70%;">
+	    <div class="col-md-8">
 	      {% if messages %}
 	        {% for message in messages %}
 	          <div class="alert alert-{{ message.tags }}">
