@@ -34,6 +34,7 @@ def hall_of_shame(request):
 	}
 	return render(request, 'blog/hall_of_shame.html', context)
 
+# add support for this to work on comments
 def LikeView(request):
 	is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
 	if is_ajax and request.method == "GET":
@@ -68,6 +69,46 @@ def LikeView(request):
 			return JsonResponse({"valid": True, "karma": karma, "post_likes": post.total_likes()}, status=200)
 		else:
 			return JsonResponse({"valid": False, "karma": karma, "post_likes": post.total_likes()}, status=200)
+	return JsonResponse({}, status=400)
+
+def process_like_outcome(obj, user, btn):
+	present_in_likes = obj.likes.filter(id=user).exists()
+	present_in_dislikes = obj.dislikes.filter(id=user).exists()
+	karma = 0
+	# pressed like button
+	if btn == 1:
+		if present_in_dislikes:
+			obj.dislikes.remove(user)
+		if not present_in_likes:
+			obj.likes.add(user)
+			karma = 1
+		else:
+			obj.likes.remove(user)
+			karma = 0
+	# pressed dislike button
+	elif btn == -1:
+		if present_in_likes:
+			obj.likes.remove(user)
+		if not present_in_dislikes:
+			obj.dislikes.add(user)
+			karma = -1
+		else:
+			obj.dislikes.remove(user)
+	return karma
+
+def LikeCommentView(request):
+	is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
+	if is_ajax and request.method == "POST":
+		comment_pk = request.POST.get("comment")
+		btn = int(request.POST.get("btn"))
+		comment = Comment.objects.filter(pk=comment_pk)
+
+		if comment.exists():
+			comment = comment.first()
+			karma = process_like_outcome(comment, request.user.id, btn)
+			return JsonResponse({"valid": True, "karma": karma, "comment_likes": comment.total_likes()}, status=200)
+		else:
+			return JsonResponse({"valid": False}, status=200)
 	return JsonResponse({}, status=400)
 
 def delete_comment(request):
@@ -246,16 +287,16 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 def create_comment(request):
 	is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
-	if is_ajax and request.method == "GET":
-		post = request.GET.get("post")
-		content = request.GET.get("content")
+	if is_ajax and request.method == "POST":
+		post = request.POST.get("post")
+		content = request.POST.get("content")
 		to_comment = Post.objects.filter(pk=post)
 		# pass content of comment argument
 		if to_comment.exists():
 			to_comment = to_comment.first()
 			
 			parent_comment = None
-			parent_comment_pk = request.GET.get("parent")
+			parent_comment_pk = request.POST.get("parent")
 			if parent_comment_pk != "":
 				# need to handle this error if the parent was deleted
 				parent_comment = Comment.objects.get(pk=parent_comment_pk)

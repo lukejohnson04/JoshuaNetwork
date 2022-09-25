@@ -1,36 +1,40 @@
 {% load templatetags %}
-<article class="media content-section infinite-item" style="position:relative;">
-	<div class="post-left-bar">
-		<img class="rounded-circle post-img" style=" margin:auto" src="{{ post.author.profile.image.url }}">
-		<div style="padding-top: 0em; text-align: center; transform: scale(0.75)" class="like-div">
-        	<a class="btn-upjoshua" href="javascript:void(0)" onclick="likePost(this, 1)" data-pk="{{ post.pk }}" data-likes="{{ post.total_likes }}">
-            {% if karma == 1 %}
-				<img src="/media/ui/upjoshua.png" name="upjoshua" style="margin: auto">
-			{% else %}
-				<img src="/media/ui/upjoshua_empty.png" name="upjoshua" style="margin: auto">				
-			{% endif %}
-			</a>
-            <strong id="likeCount">{{ post.total_likes }}</strong>
-        	<a class="btn-downjoshua" href="javascript:void(0)" onclick="likePost(this, -1)" data-pk="{{ post.pk }}" data-likes="{{ post.total_likes }}">
-            {% if karma == -1 %}
-				<img src="/media/ui/downjoshua.png" name="downjoshua" style="display:block; margin: auto">
-			{% else %}
-				<img src="/media/ui/downjoshua_empty.png" name="downjoshua" style="display:block; margin: auto">				
-			{% endif %}
-			</a>
+<article class="media content-section infinite-item" style="position:relative; display: grid">
+	<div style="margin: 0; display: flex">
+		<div style="display: inline-block; width: 12%">
+			<div style="display:flex; flex-direction: column; align-items: center">
+				<img class="rounded-circle" style="width: 80%; min-width: 40px; margin-bottom: 10px" src="{{ post.author.profile.image.url }}">
+	        	<div style="display:flex; flex-direction: column; align-items: center; width:65%">
+		        	<a class="btn-upjoshua" href="javascript:void(0)" onclick="likePost(this, 1)" data-pk="{{ post.pk }}" data-likes="{{ post.total_likes }}">
+		            {% if karma == 1 %}
+						<img src="/media/ui/upjoshua.png" name="upjoshua" style="width: 100%">
+					{% else %}
+						<img src="/media/ui/upjoshua_empty.png" name="upjoshua" style="width: 100%">				
+					{% endif %}
+					</a>
+		            <strong id="likeCount">{{ post.total_likes }}</strong>
+		        	<a class="btn-downjoshua" href="javascript:void(0)" onclick="likePost(this, -1)" data-pk="{{ post.pk }}" data-likes="{{ post.total_likes }}">
+		            {% if karma == -1 %}
+						<img src="/media/ui/downjoshua.png" name="downjoshua" style="width: 100%">
+					{% else %}
+						<img src="/media/ui/downjoshua_empty.png" name="downjoshua" style="width: 100%">				
+					{% endif %}
+					</a>
+				</div>
+			</div>
 		</div>
-	</div>
-	<div class="media-body post-body">
-		<div class="article-metadata">
-			<a href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
-	 		<p class="text-muted">{{ post.date_posted | timesince | upto:','}} ago</p>
-	    </div>
-		<h2 class="post-title"><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
-		<p class="article-content">{{ post.content }}</p>
-		{% if post.image %}
-			<img style="max-width: 100%; min-width: 60%; height: auto" src="{{ post.image.url }}">
-			<br><br>
-		{% endif %}
+		<div class="media-body post-body" style="margin-left: 0.75em">
+			<div class="article-metadata">
+				<a href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+		 		<p class="text-muted">{{ post.date_posted | timesince | upto:','}} ago</p>
+		    </div>
+			<a class="article-title" href="{% url 'post-detail' post.id %}"><h2 class="post-title">{{ post.title }}</h2></a>
+			<p class="article-content">{{ post.content }}</p>
+			{% if post.image %}
+				<img style="max-width: 100%; min-width: 60%; height: auto" src="{{ post.image.url }}">
+				<br><br>
+			{% endif %}
+		</div>
 	</div>
 	<div class="post-bottom-bar">
 		{% if post.author == user %}

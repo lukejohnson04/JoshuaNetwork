@@ -28,7 +28,12 @@ def show_notifications(context):
 
 @register.inclusion_tag('blog/render_comment.html')
 def render_comment(comment, user):
-	return {'comment': comment, 'user': user}
+	karma = 0
+	if comment.likes.filter(id=user.id).exists():
+		karma = 1
+	elif comment.dislikes.filter(id=user.id).exists():
+		karma = -1
+	return {'comment': comment, 'user': user, 'karma': karma}
 
 @register.filter
 @stringfilter

@@ -1,6 +1,10 @@
+html {
+  font-size: 16px;
+}
+
 body {
   color: #333333;
-  margin-top: 5rem;
+  padding-top: 5rem;
   background-image: url("/media/default_backgrounds/jungle.jpg");
   background-attachment: fixed;
 }
@@ -19,10 +23,6 @@ ul {
 
 .site-header .navbar-nav .nav-link {
   color: #cbd5db;
-}
-
-.pizza {
-  color: black;
 }
 
 .site-header .navbar-nav .nav-link:hover {
@@ -94,15 +94,16 @@ a.article-title:hover {
 }
 
 .article-metadata {
-  padding: 0.25em;
+  padding-bottom: 0.25em;
+  width: 100%;
 }
 
 .article-metadata p {
-  margin-bottom: 0.5em;
+  margin-bottom: 0.25em;
 }
 
 .article-metadata a {
-  font-size: 1.125rem;
+  font-size: 1.125em;
 }
 
 .article-metadata a:hover {
@@ -186,19 +187,23 @@ a.article-title:hover {
   cursor: pointer;
 }
 
+@font-face {
+  font-family: 'Comic Sans MS';
+  src: url("COMIC.TTF");
+}
+
 * {
-  font-family: "Comic Sans MS", "Comic Sans", cursive;
-  color:black;
+  font-family: 'Comic Sans MS';
 }
 
 .post-body {
   padding: 0.25em;
+  padding-top:0;
   width:100%;
 }
 
 .post-bottom-bar {
   bottom: 0px;
-  background-color: red;
   position: absolute;
   right: 0px;
   padding: 0.75em;
@@ -210,11 +215,40 @@ a.article-title:hover {
 
 .post-left-bar {
   justify-content: center;
-  padding: 0.5em;
 }
 
 .hos-header {
   text-align: center;
   color: white;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 2px 2px 0 #000;
+}
+
+/* Small */
+@media (max-width: 768px) {
+  p, a {
+    font-size: 95%;
+  }
+}
+
+@media (max-width: 576px) {
+  p, a {
+    font-size: 3vw;
+  }
+  body h1 {
+    font-size: 8vw;
+  }
+  body h2 {
+    font-size: 5.5vw;
+  }
+
+  .article-metadata a, .post-bottom-bar a {
+    font-size: 3.5vw;
+  }
+
+  .article-metadata p, .post-bottom-bar p {
+    font-size: 3.75vw;
+  }
+  .article-metadata small, .post-bottom-bar small {
+    font-size: 2.5vw;
+  }
 }

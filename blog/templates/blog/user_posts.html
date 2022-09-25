@@ -13,11 +13,6 @@
 			{% render_post_func post user %}
 		{% endfor %}
 	</div>
-	<div class="d-flex d-none position-fixed loading" style="top:35vh; left:46vw">
-		<div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-		  <span class="sr-only">Loading...</span>
-		</div>
-	</div>
 	{% if page_obj.has_next %}
 		<a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}&sort_type={{ sort_type }}">next</a>
 	{% endif %}
