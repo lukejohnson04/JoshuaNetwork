@@ -8,6 +8,7 @@ class UserRegisterForm(UserCreationForm):
 
 	class Meta:
 		model = User
+		User._meta.get_field('username').validators[1].limit_value = 30
 		fields = ['username', 'email', 'password1', 'password2']
 
 class UserUpdateForm(forms.ModelForm):

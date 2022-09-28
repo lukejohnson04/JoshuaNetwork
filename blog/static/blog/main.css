@@ -75,6 +75,7 @@ a.article-title:hover {
 
 .article-content {
   white-space: pre-line;
+  line-break: anywhere;
   line-height: 1.4;
 }
 
@@ -207,6 +208,12 @@ a.article-title:hover {
   position: absolute;
   right: 0px;
   padding: 0.75em;
+}
+
+.comment-bottom-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75em;
 }
 
 .post-left-bar img {

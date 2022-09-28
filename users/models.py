@@ -17,17 +17,13 @@ class Profile(models.Model):
 		return f'{self.user.username} Profile'
 
 	def save(self, *args, **kwargs):
-		super().save()
-
+		super().save(*args, **kwargs)
 		img = Image.open(self.image.path)
-
-		if img.height > 300 or img.width > 300:
-			output_size = (300, 300)
-			img.thumbnail(output_size)
-			img.save(self.image.path)
+		img = img.resize((300, 300), Image.ANTIALIAS)
+		img.save(self.image.path)
 
 class Notification(models.Model):
-	# 1 = Like, 2 = Follow, 3 = Comment
+	# 1 = Like, 2 = Follow, 3 = Comment on your post, 4 = Responded to your comment
 	notif_type = models.IntegerField(default=2)
 
 	to_user = models.ForeignKey(User, related_name='notification_to', on_delete=models.CASCADE, null=True)

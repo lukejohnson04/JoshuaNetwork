@@ -32,7 +32,7 @@ class Comment(models.Model):
 	author = models.ForeignKey(User, on_delete=models.CASCADE)
 	# every comment has one parent, but can have many replies
 	parent = models.ForeignKey('self', null=True, blank=True, related_name="replies", on_delete=models.CASCADE)
-	responding_to = models.OneToOneField('self', null=True, blank=True, on_delete=models.SET_NULL)
+	responding_to = models.ForeignKey(User, null=True, blank=True, related_name="+", on_delete=models.SET_NULL)
 
 	likes = models.ManyToManyField(User, related_name='liked_comments', blank=True)
 	dislikes = models.ManyToManyField(User, related_name='disliked_comments', blank=True)

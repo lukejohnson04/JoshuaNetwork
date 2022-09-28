@@ -288,20 +288,42 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 def create_comment(request):
 	is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
 	if is_ajax and request.method == "POST":
-		post = request.POST.get("post")
+		post_pk = request.POST.get("post")
 		content = request.POST.get("content")
-		to_comment = Post.objects.filter(pk=post)
+		post = Post.objects.filter(pk=post_pk)
+
 		# pass content of comment argument
-		if to_comment.exists():
-			to_comment = to_comment.first()
-			
-			parent_comment = None
+		if post.exists():
+			post = post.first()
 			parent_comment_pk = request.POST.get("parent")
+			# Check if it's a head comment or not
+			parent_comment = None
 			if parent_comment_pk != "":
-				# need to handle this error if the parent was deleted
-				parent_comment = Comment.objects.get(pk=parent_comment_pk)
+				parent_comment = Comment.objects.filter(pk=parent_comment_pk)
+				if parent_comment.exists():
+					parent_comment = parent_comment.first()
+				else:
+					parent_comment = None
 			
-			comment = Comment.objects.create(post=to_comment, content=content, author=request.user, parent=parent_comment)
+			responding_to = None
+			notif_author = True
+
+			# Check if the comment starts with pinging a user
+			if content[0] == '@':
+				ping_msg = content.split()[0]
+				responding_to = User.objects.filter(username=ping_msg[1:len(ping_msg)])
+				if responding_to.exists():
+					responding_to = responding_to.first()
+					# notify them that you responded to their comment
+					notif = Notification.objects.create(notif_type=4, from_user=request.user, to_user=responding_to, post=post)
+					notif_author = True
+				else:
+					responding_to = None
+			# Don't notify someone twice if they're both the parent comment author and within the thread
+			if notif_author:
+				notif = Notification.objects.create(notif_type=3, from_user=request.user, to_user=post.author, post=post)
+
+			comment = Comment.objects.create(post=post, content=content, author=request.user, parent=parent_comment, responding_to=responding_to)
 			response = render_to_string('blog/render_comment.html', context={"comment": comment, "user": request.user, "parent": parent_comment})
 			return JsonResponse({"valid": True, "commented": True, "rendered-comment": response}, status=200)
 		return JsonResponse({"valid": False, "commented": False}, status=400)

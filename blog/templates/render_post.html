@@ -29,7 +29,7 @@
 		 		<p class="text-muted">{{ post.date_posted | timesince | upto:','}} ago</p>
 		    </div>
 			<a class="article-title" href="{% url 'post-detail' post.id %}"><h2 class="post-title">{{ post.title }}</h2></a>
-			<p class="article-content">{{ post.content }}</p>
+			<p class="article-content" >{{ post.content }}</p>
 			{% if post.image %}
 				<img style="max-width: 100%; min-width: 60%; height: auto" src="{{ post.image.url }}">
 				<br><br>
