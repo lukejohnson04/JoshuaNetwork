@@ -9,5 +9,12 @@
 	{% render_post_func shame_post shame_user %}
 {% endblock content %}
 {% block taskbar %}
-{% render_user_sidebar shame_user user %}
+	{% render_user_sidebar shame_user user %}
+	<div class="col">
+		<div class="content-section" style="padding: 1em; padding-top: 1.5em">
+			<p>
+				The hall of shame highlights <strong>the most shameful of users and the most shameful of posts.</strong> While other social media platforms have disabled like counts by default and set strict rules prohibiting cyberbullying, here at JoshuaNetwork we believe <strong>sometimes people do deserve a little public shaming</strong> to push them in the right direction.
+			</p>
+		</div>
+	</div>
 {% endblock taskbar %}

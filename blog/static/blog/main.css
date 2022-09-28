@@ -230,16 +230,95 @@ a.article-title:hover {
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 2px 2px 0 #000;
 }
 
-/* Small */
-@media (max-width: 768px) {
-  p, a {
-    font-size: 95%;
+.break {
+  flex-basis: 100%;
+  height: 0;
+}
+
+.user-sidebar-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 20% 1fr;
+}
+
+/* Following box css on larger screen */
+.following-box {
+  display: flex;
+  text-align: center;
+  flex-wrap: nowrap;
+  flex: 1 1 0;
+}
+
+.profile-page-img-div {
+  width: 25%;
+  min-width: 40px;
+}
+
+.sm-follow-btn {
+  display: none;
+}
+
+.profile-name {
+  font-size: 24px;
+  margin-left: 0.5em;
+}
+
+@media (max-width: 991.9px) {
+  .profile-name {
+    font-size: 2.25vw;
+  }
+
+  .scaled-text {
+    font-size: 1.5vw;
   }
 }
 
-@media (max-width: 576px) {
+/* Small */
+@media (max-width: 767.9px) {
   p, a {
+    font-size: 95%;
+  }
+
+  /* Following box css on smaller screen */
+  .following-box {
+    width: 20%;
+    flex-direction: column;
+    flex: none;
+  }
+
+  .profile-page-img-div {
+    width: 20%;
+  }
+
+  .bio-div {
+    flex: 1;
+  }
+
+  .profile-name {
+    font-size: 5vw;
+  }
+
+  .sm-follow-btn {
+    display: block;
+  }
+  
+  .scaled-text {
+    font-size: 2.25vw;
+  }
+
+  .lg-follow-btn {
+    display: none;
+  }
+}
+
+/* xs */
+@media (max-width: 575.9px) {
+  .scaled-text {
     font-size: 3vw;
+  }
+
+  p, a {
+    font-size: 3.5vw;
   }
   body h1 {
     font-size: 8vw;

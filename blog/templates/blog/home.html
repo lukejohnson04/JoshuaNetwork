@@ -19,34 +19,26 @@
 {% endblock content %}
 {% block taskbar %}
 <div class="col-md-4">
-	<div class="content-section" style="padding-top:5%">
+	<div class="content-section" style="padding-top:5%; padding-bottom: 0; padding-left: 1em">
 		<h4 style="display:inline">Need some awesome conversation starters??? Try these!!!</h4>
-		<br><br>
-		<ul class="list-group">
-			<li class="list-group-item list-group-item-light">Prompt of the hour: <b>Modern usage of the word "stan"</b></li>
+		<ul class="list-group" style="padding-top: 1em; padding-bottom: 1em">
+			<li class="list-group-item list-group-item-light">Prompt of the hour: <b>Seperation of church and state</b></li>
 			<li class="list-group-item list-group-item-light">Prompt of the day: <b>The War on Drugs</b></li>
 			<li class="list-group-item list-group-item-light">Prompt of the week: <b>Taco Tuesdays vs Pizza Friday</b></li>
-			<li class="list-group-item list-group-item-light">Random prompt: <b>Black Lives Matter</b></li>
-			<li class="list-group-item list-group-item-light">Daily character limit: <b>27</b></li>
-			<li class="list-group-item list-group-item-light">Sort by
-				<!--
-				<form method="get" action="{% url 'blog-home' %}">
-					<p>Sort type: <input type="text" value={{sort_type}} name="sort_type"/></p>
-					<p><input type="submit" name="submit" value="submit"/></p>
-				</form>
-				-->
-
-				<form method="get" action="{% url 'blog-home' %}">
-					<select id="sort-selector" onchange="form.submit();" name="sort_type">
-	    				<option value='hot'>The Joshiest</option>
-	    				<option value='new'>New</option>
-	    				<option value='top'>JoshNet Greatest JoshHits</option>
-	    				<option value='controversial'>Conteroversial</option>
-					</select>
-				</form>
-			</li>
 		</ul>
-		<br>
+	</div>
+	<div class="content-section" style="margin-top: 0; padding-bottom: 0; padding-left: 1em; padding-right: 0.5em">
+		<form method="get" class="form" style="width: 100%" action="{% url 'user-posts' user.username %}">
+			<div class="form-group" style="display: flex; align-items: center">
+				<p class="text-muted" style="margin-bottom: 0px">Sort by:&nbsp;</p>
+				<select id="sort-selector" onchange="form.submit();" style="flex-grow: 1" name="sort_type">
+					<option value='hot'>Hot</option>
+					<option value='new'>New</option>
+					<option value='top'>Top</option>
+					<option value='controversial'>Conteroversial</option>
+				</select>
+			</div>
+		</form>
 	</div>
 </div>
 {% endblock taskbar %}

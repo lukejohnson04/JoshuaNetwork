@@ -12,7 +12,7 @@ Staying in your own little internet bubbles can be fun, but it sure can get old!
 - [x] Determine final layout for comments (single or infinite nesting, potential coloring for response threads to avoid confusion, etc.)
     - Decided on single comments instead of infinite nesting
 - [x] Ability to vote on and delete comments + HTML
-- [ ] Responsive HTML
+- [x] Responsive HTML
 - [ ] Refactor POST and GET methods for each ajax calls and form submissions
 - [ ] Ship on linux server
 - [ ] Random Daily Task implementation using Celery
