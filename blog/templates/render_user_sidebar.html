@@ -39,7 +39,7 @@
 		</div>
 	</div>
 	<div class="content-section" style="margin-top: 0; padding-bottom: 0; padding-left: 1em; padding-right: 0.5em">
-		<form method="get" class="form" style="width: 100%" action="{% url 'user-posts' user.username %}">
+		<form method="get" class="form" style="width: 100%" action="{% url 'user-posts' user_to_render.username %}">
 			<div class="form-group" style="display: flex; align-items: center">
 				<p class="text-muted" style="margin-bottom: 0px">Sort by:&nbsp;</p>
 				<select id="sort-selector" onchange="form.submit();" style="flex-grow: 1" name="sort_type">
