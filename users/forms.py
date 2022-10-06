@@ -11,6 +11,9 @@ class UserRegisterForm(UserCreationForm):
 		User._meta.get_field('username').validators[1].limit_value = 30
 		fields = ['username', 'email', 'password1', 'password2']
 
+	def save(self, *args, **kwargs):
+		super().save(*args, **kwargs)
+
 class UserUpdateForm(forms.ModelForm):
 	email = forms.EmailField()
 

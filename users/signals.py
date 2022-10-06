@@ -10,4 +10,6 @@ def create_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, **kwargs):
+	if not Profile.objects.filter(user=instance).exists():
+		Profile.objects.create(user=instance)
 	instance.profile.save()

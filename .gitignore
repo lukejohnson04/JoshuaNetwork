@@ -1,5 +1,10 @@
-*.pyc  
-*~  
-__pycache__  
-venv  
-.DS_Store
+*.pyc
+*~
+__pycache__
+venv
+.DS_Store 
+db.sqlite3
+django_proj/settings.py
+media/
+access.log
+error.log 
