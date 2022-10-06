@@ -5,6 +5,7 @@ venv
 .DS_Store 
 db.sqlite3
 django_proj/settings.py
-media/
+media/profile_pics
+media/post_images
 access.log
 error.log 
