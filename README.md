@@ -14,6 +14,6 @@ Staying in your own little internet bubbles can be fun, but it sure can get old!
 - [x] Ability to vote on and delete comments + HTML
 - [x] Responsive HTML
 - [ ] Refactor POST and GET methods for each ajax calls and form submissions
-- [ ] Ship on linux server
+- [x] Ship on linux server
 - [ ] Random Daily Task implementation using Celery
 - [ ] Random xyz UX design
