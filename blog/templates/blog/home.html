@@ -10,7 +10,7 @@
 	</script>
 	<div id="post-list" class="infinite-container">
 		{% for post in posts %}
-			{% render_post_func post user %}
+			{% render_post_func post user False %}
 		{% endfor %}
 	</div>
 	{% if page_obj.has_next %}
