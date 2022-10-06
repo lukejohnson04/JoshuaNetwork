@@ -5,13 +5,13 @@ from django.template.defaultfilters import stringfilter
 register = template.Library()
 
 @register.inclusion_tag('render_post.html')
-def render_post_func(post, user):
+def render_post_func(post, user, detail_view=False):
 	karma = 0
 	if post.likes.filter(id=user.id).exists():
 		karma = 1
 	elif post.dislikes.filter(id=user.id).exists():
 		karma = -1
-	return {'post': post, 'user': user, 'karma': karma}
+	return {'post': post, 'user': user, 'karma': karma, 'detail_view': detail_view}
 
 @register.inclusion_tag('render_user_sidebar.html')
 def render_user_sidebar(user_to_render, user):

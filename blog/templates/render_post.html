@@ -31,7 +31,7 @@
 			<a class="article-title" href="{% url 'post-detail' post.id %}"><h2 class="post-title">{{ post.title }}</h2></a>
 			<p class="article-content" >{{ post.content }}</p>
 			{% if post.image %}
-				<img style="max-width: 100%; min-width: 60%; height: auto" src="{{ post.image.url }}">
+				<img style="max-width: 100%; min-width: 20px; height: auto; {% if not detail_view %}max-height: 800px{% endif %}" src="{{ post.image.url }}">
 				<br><br>
 			{% endif %}
 		</div>

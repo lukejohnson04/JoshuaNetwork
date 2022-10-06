@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
+from PIL import Image
+import os
 
 # Create your models here.
 class Post(models.Model):
@@ -24,6 +26,26 @@ class Post(models.Model):
 
 	def has_liked(self, user_id):
 		return self.likes.filter(id=user_id).exists()
+
+	def delete(self, using=None, keep_parents=False):
+		if self.image != None:
+			self.image.delete()
+		super().delete()
+
+	def save(self, *args, **kwargs):
+		super().save(*args, **kwargs)
+		if self.image:
+			# compress
+			imageTemp = Image.open(self.image.path)
+
+			max_size = (2000, 2000)
+			imageTemp.thumbnail(max_size, Image.ANTIALIAS)
+			imageTemp = imageTemp.convert('RGB')
+
+			imageTemp.save(self.image.path, "JPEG")
+		#img = Image.open(self.image.path)
+		#img = img.resize((300, 300), Image.ANTIALIAS)
+		#img.save(self.image.path)
 
 class Comment(models.Model):
 	post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)

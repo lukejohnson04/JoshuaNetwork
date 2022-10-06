@@ -2,7 +2,7 @@
 {% load templatetags %}
 {% block content %}
 	<!-- Don't actually need the user capture lol -->
-	{% render_post_func object user %}
+	{% render_post_func object user True %}
 	<div>
 		<div class="form-outline">
 		 	<label class="form-label">Post Comment</label>
