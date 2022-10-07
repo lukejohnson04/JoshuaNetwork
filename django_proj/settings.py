@@ -14,23 +14,34 @@ from pathlib import Path
 import os
 import json
 
-with open('/etc/config.json') as config_file:
-	config = json.load(config_file)
+live_deploy = True
+
+if live_deploy:
+
+    with open('/etc/config.json') as config_file:
+        config = json.load(config_file)
+    
+    SECRET_KEY = config['SECRET_KEY']
+    
+    ALLOWED_HOSTS = ['www.joshuanetwork.network', 'joshuanetwork.network',  '139.144.168.237']
+
+    EMAIL_HOST_USER = config.get('EMAIL_USER')
+    EMAIL_HOST_PASSWORD = config.get('EMAIL_PASS')
+
+    DEBUG = False
+
+else:
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+    SECRET_KEY = '123'
+
+    EMAIL_HOST_USER = 'abc'
+    EMAIL_HOST_PASSWORD = '123'
+    
+    DEBUG = True
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config['SECRET_KEY']
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-ALLOWED_HOSTS = ['www.joshuanetwork.network', 'joshuanetwork.network',  '139.144.168.237']
 
 # Application definition
 
@@ -148,5 +159,3 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config.get('EMAIL_USER')
-EMAIL_HOST_PASSWORD = config.get('EMAIL_PASS')
