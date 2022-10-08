@@ -18,7 +18,8 @@ from PIL import Image
 
 def home(request):
 	context = {
-		'posts': Post.objects.filter(likes.count())
+		'posts': Post.objects.filter(likes.count()),
+		'user_count': 5#User.objects.count(),
 	}
 	sort_type = request.GET.get("sort-type"),
 	return render(request, 'blog/home.html', context)
@@ -165,6 +166,7 @@ class PostListView(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(PostListView, self).get_context_data(**kwargs)
 		context['sort_type'] = self.request.GET.get('sort_type', 'new')
+		context['user_count'] = User.objects.count()
 		return context
 
 def get_post_set(ordering, n_author=None):
