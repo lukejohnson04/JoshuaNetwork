@@ -17,13 +17,11 @@
 	<div class="media-body">
 		<h1 style="color:black">Comments</h1>
 		<div id="comment-section">
-			{% block comments %}
-				{% for comment in top_comments %}
-					{% render_comment comment user %}
-				{% empty %}
-					<p>There are no comments yet.</p>
-				{% endfor %}
-			{% endblock comments %}
+			{% for comment in top_comments %}
+				{% render_comment comment user %}
+			{% empty %}
+				<p>There are no comments yet.</p>
+			{% endfor %}
 		</div>
 	</div>
 {% endblock content %}

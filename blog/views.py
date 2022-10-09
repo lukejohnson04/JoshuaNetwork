@@ -189,8 +189,8 @@ def get_post_set(ordering, n_author=None):
 			if days_since_posted <= 1:
 				date_weight = 1
 			else:
-				date_weight = min(1, -log((timezone.now() - post.date_posted).days) + 1)
-			sort_weight = (1 + (post.total_likes()*0.5) + post.comments.count()) * date_weight
+				date_weight = 1/days_since_posted**2
+			sort_weight = ((post.likes.count() + 1 + post.comments.count()) / (post.dislikes.count()+1)) * date_weight
 			post_dict[post.pk] = sort_weight
 		post_dict = dict(sorted(post_dict.items(), reverse=True, key=lambda item: item[1]))
 		post_list = []
@@ -249,7 +249,7 @@ class PostDetailView(DetailView):
 		context = super(PostDetailView, self).get_context_data(**kwargs)
 		post = get_object_or_404(Post, id=self.kwargs['pk'])
 		context['total_likes'] = post.total_likes
-		top_comments = post.comments.filter(parent=None)
+		top_comments = post.comments.filter(parent=None) # filter by likes lol wtf is this
 		context['top_comments'] = top_comments
 		return context
 

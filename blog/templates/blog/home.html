@@ -12,6 +12,7 @@
 		{% for post in posts %}
 			{% render_post_func post user False %}
 		{% endfor %}
+
 	</div>
 	{% if page_obj.has_next %}
 		<a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}&sort_type={{ sort_type }}">next</a>

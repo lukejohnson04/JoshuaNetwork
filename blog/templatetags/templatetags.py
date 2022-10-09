@@ -35,6 +35,15 @@ def render_comment(comment, user):
 		karma = -1
 	return {'comment': comment, 'user': user, 'karma': karma}
 
+@register.inclusion_tag('blog/render_preview_comment.html')
+def render_preview_comment(comment, user):
+	karma = 0
+	if comment.likes.filter(id=user.id).exists():
+		karma = 1
+	elif comment.dislikes.filter(id=user.id).exists():
+		karma = -1
+	return {'comment': comment, 'user': user, 'karma': karma}
+
 @register.filter
 @stringfilter
 def upto(value, delimiter=None):

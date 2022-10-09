@@ -1,0 +1,42 @@
+{% load templatetags %}
+<article class="media preview-comment" style="display: flex; align-items: center">
+	<div style="width: 8%; max-width: 2.5em">
+		<img class="rounded-circle" src="{{ comment.author.profile.image.url }}" style="width:85%">
+	</div>
+	<div style="overflow: hidden; line-break: anywhere; display: grid; overflow: hidden; width: 100%">
+		<div style="display: flex; align-items: flex-end; width: 100%; gap: 0.4em; height: 1.5em">
+			<a href="{% url 'user-posts' comment.author.username %}" class="scaled-text">{{ comment.author }}</a>
+			<small class="text-muted scaled-small" style="">{{ comment.date_posted | timesince | upto:','}} ago</small>
+			<div style="justify-content: right; flex: 1; display: flex; align-items: center">
+				{% csrf_token %}
+				<a class="btn-upjoshua" href="javascript:void(0)" onclick="like_comment(this, 1)" data-pk="{{ comment.pk }}" data-likes="{{ comment.total_likes }}">
+					{% if karma == 1 %}
+						<img src="/media/ui/upjoshua.png" name="upjoshua" style="width: 1.25em">
+					{% else %}
+						<img src="/media/ui/upjoshua_empty.png" name="upjoshua" style="width: 1.25em">
+					{% endif %}
+				</a>
+				<div style="text-align: center; min-width: 1em">
+					<p id="likeCount-{{ comment.pk }}" style="margin-bottom: 0">{{ comment.total_likes }}</p>
+				</div>
+				<a class="btn-downjoshua" href="javascript:void(0)" onclick="like_comment(this, -1)" data-pk="{{ comment.pk }}" data-likes="{{ comment.total_likes }}">
+					{% if karma == -1 %}
+						<img src="/media/ui/downjoshua.png" name="downjoshua" style="width: 1.25em">
+					{% else %}
+						<img src="/media/ui/downjoshua_empty.png" name="downjoshua" style="width: 1.25em">
+					{% endif %}
+				</a>
+			</div>
+		</div>
+		<div style="max-width: 100%; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+			<p class="scaled-text-md" style="margin-bottom: 0.35em">
+				{% if comment.parent %}
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
+					  <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/>
+					</svg>
+				{% endif %}
+				{{ comment.content|urlize }}
+			</p>
+		</div>
+	</div>
+</article>

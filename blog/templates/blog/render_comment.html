@@ -30,13 +30,13 @@
 				<small class="text-muted">{{ comment.date_posted | timesince | upto:','}} ago</small>
 			</div>
 			<div style="flex:1">
-				<p style="margin-bottom: 0px; margin-left: 0.5em">{{ comment.content }}</p>
-			</div>
-			<div class="comment-bottom-bar">
-				<a href="javascript:void(0)" class="reply-btn text-muted" data-pk="{{ comment.pk }}" direct-response="{% if comment.parent %}{{ comment.author }}{% endif %}">Reply</a>
-				{% if comment.author == user %}
-					<a href="javascript:void(0)" class="text-danger" onclick="deleteComment(this)" data-pk="{{ comment.pk }}">Delete</a>
-				{% endif %}				
+				<p style="margin-bottom: 0px; margin-left: 0.5em">{{ comment.content|urlize }}</p>
+				<div class="post-bottom-bar" style="padding-top: 0.25em">
+					<a href="javascript:void(0)" class="reply-btn text-muted" data-pk="{{ comment.pk }}" direct-response="{% if comment.parent %}{{ comment.author }}{% endif %}">Reply</a>
+					{% if comment.author == user %}
+						<a href="javascript:void(0)" class="text-danger" onclick="deleteComment(this)" data-pk="{{ comment.pk }}">Delete</a>
+					{% endif %}				
+				</div>
 			</div>
 		</div>
 	</div>
