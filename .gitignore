@@ -6,6 +6,6 @@ venv
 db.sqlite3
 media/profile_pics
 media/post_images
-static/
+/static/
 access.log
 error.log 
