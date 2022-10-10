@@ -11,6 +11,11 @@
 	<div id="post-list" class="infinite-container">
 		{% for post in posts %}
 			{% render_post_func post user False %}
+		{% empty %}
+			<h1 class="info-header">Oops!!! You're not following any accounts yet!!!
+			</h1>
+			<h3 class="info-header" style="color: rgb(255, 220, 220)">Head to the trending page to check out what's hot!</h2>
+
 		{% endfor %}
 
 	</div>
@@ -30,7 +35,7 @@
 		<p>Currently: <strong>{{ user_count }} Joshowers</strong> in the Joshua Army (and growing!)</p>
 	</div>
 	<div class="content-section" style="margin-top: 0; padding-bottom: 0; padding-left: 1em; padding-right: 0.5em">
-		<form method="get" class="form" style="width: 100%" action="{% url 'blog-home' %}">
+		<form method="get" class="form" style="width: 100%" action="">
 			<div class="form-group" style="display: flex; align-items: center">
 				<p class="text-muted" style="margin-bottom: 0px">Sort by:&nbsp;</p>
 				<select id="sort-selector" onchange="form.submit();" style="flex-grow: 1" name="sort_type">

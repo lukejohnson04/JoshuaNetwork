@@ -11,6 +11,13 @@
 	<div id="post-list" class="infinite-container">
 		{% for post in posts %}
 			{% render_post_func post user %}
+		{% empty %}
+			{% if user_of_page == user %}
+				<h1 class="info-header">You have no posts yet.</h1>
+				<a href="{% url 'post-create' %}"><h4 class="info-header" style="color:rgb(220, 220, 255)">Click here to get started!</h4></a>
+			{% else %}
+				<h2 class="info-header">This user has no posts.</h2>
+			{% endif %}
 		{% endfor %}
 	</div>
 	{% if page_obj.has_next %}

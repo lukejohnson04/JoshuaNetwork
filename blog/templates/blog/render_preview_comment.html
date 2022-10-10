@@ -3,11 +3,11 @@
 	<div style="width: 8%; max-width: 2.5em">
 		<img class="rounded-circle" src="{{ comment.author.profile.image.url }}" style="width:85%">
 	</div>
-	<div style="overflow: hidden; line-break: anywhere; display: grid; overflow: hidden; width: 100%">
-		<div style="display: flex; align-items: flex-end; width: 100%; gap: 0.4em; height: 1.5em">
-			<a href="{% url 'user-posts' comment.author.username %}" class="scaled-text">{{ comment.author }}</a>
-			<small class="text-muted scaled-small" style="">{{ comment.date_posted | timesince | upto:','}} ago</small>
-			<div style="justify-content: right; flex: 1; display: flex; align-items: center">
+	<div style="overflow: hidden; line-break: anywhere; display: grid; overflow: hidden; width: 100%;">
+		<div style="display: flex; width: 100%; gap: 0.4em; min-height: 10px; align-items: center">
+			<a href="{% url 'user-posts' comment.author.username %}" style="overflow-wrap: anywhere; inline-size: min-width" class="scaled-text">{{ comment.author }}</a>
+			<small style="flex-shrink: 0" class="text-muted scaled-small">{{ comment.date_posted | timesince | upto:','}} ago</small>
+			<div style="flex-shrink: 0; justify-content: right; flex: 1; display: flex; align-items: flex-start">
 				{% csrf_token %}
 				<a class="btn-upjoshua" href="javascript:void(0)" onclick="like_comment(this, 1)" data-pk="{{ comment.pk }}" data-likes="{{ comment.total_likes }}">
 					{% if karma == 1 %}

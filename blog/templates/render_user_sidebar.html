@@ -9,15 +9,19 @@
 				{% if user_to_render == user %}
 					<a href="{% url 'profile' %}">Edit Profile</a>
 				{% else %}
-					{% csrf_token %}
-					<button class="follow-btn btn btn-primary btn-md" user-pk="{{ user_to_render.pk }}">{% if is_following %}Unfollow{% else %}Follow{% endif %}</button>
+					{% if user.is_authenticated %}
+						{% csrf_token %}
+						<button class="follow-btn btn btn-primary btn-md" user-pk="{{ user_to_render.pk }}">{% if is_following %}Unfollow{% else %}Follow{% endif %}</button>
+					{% else %}
+						<button class="btn btn-primary btn-md" onclick="window.location='{% url 'login' %}'">Follow</button>
+					{% endif %}
 				{% endif %}
 			</div>
 		</div>
 		<div style="display: flex; flex-wrap: wrap-reverse">
 			<div class="following-box">
 				<div style="flex-grow: 1">
-					<p class="mb-1 h5">{{ user_to_render.profile.followers.count }}</p>
+					<p class="mb-1 h5" id="follower-count">{{ user_to_render.profile.followers.count }}</p>
 					<p class="text-muted mb-0 scaled-text">Joshowers</p>
 				</div>
 				<div style="flex-grow: 1">
@@ -28,8 +32,12 @@
 					{% if user_to_render == user %}
 						<a href="{% url 'profile' %}">Edit Profile</a>
 					{% else %}
-						{% csrf_token %}
-						<button class="follow-btn btn btn-primary btn-sm" user-pk="{{ user_to_render.pk }}">{% if is_following %}Unfollow{% else %}Follow{% endif %}</button>
+						{% if user.is_authenticated %}
+							{% csrf_token %}
+							<button class="follow-btn btn btn-primary btn-md" user-pk="{{ user_to_render.pk }}">{% if is_following %}Unfollow{% else %}Follow{% endif %}</button>
+						{% else %}
+							<button class="btn btn-primary btn-md" onclick="window.location='{% url 'login' %}'">Follow</button>
+						{% endif %}
 					{% endif %}
 				</div>
 			</div>

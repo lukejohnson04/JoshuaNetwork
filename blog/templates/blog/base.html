@@ -39,6 +39,7 @@
 	      <div class="collapse navbar-collapse" id="navbarToggle">
 	        <div class="navbar-nav mr-auto">
 	          <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
+	          <a class="nav-item nav-link" href="{% url 'trending' %}">Hot and Trending</a>
 	          <a class="nav-item nav-link" href="{% url 'hall-of-shame' %}">Hall of Shame</a>
 	        </div>
 	        <!-- Navbar Right Side -->
@@ -195,10 +196,6 @@
     		})
 		}
 
-		function followUser(element, user) {
-			console.log("test");
-		}
-
 		$(document).on("click", ".reply-btn", function() {
 			let comment_pk = $(this).attr('data-pk')
 			let reply_box = $("#reply-box-" + comment_pk)
@@ -215,6 +212,7 @@
 		$(document).on('click', '.follow-btn', function() {
 			var element = this;
 			var user_pk = $(element).attr("user-pk");
+
     		$.ajax({
     			type: 'GET',
     			url: "{% url 'follow-user' %}",
@@ -223,11 +221,14 @@
     				if (!response["valid"]) {
     					alert("Failed to delete comment");
     				} else {
-    					document.getElementById("follower-count-" + user_pk).innerHTML = response["follow-count"] + " Joshowers";
+    					let follow_count = $("#follower-count")
+
     					if (response["unfollowed"]) {
     						$(element).html("Follow");
+	    					follow_count.text(parseInt(follow_count.html())-1);
     					} else {
     						$(element).html("Unfollow");
+	    					follow_count.text(parseInt(follow_count.html())+1);
     					}
     				}
     			}

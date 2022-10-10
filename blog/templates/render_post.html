@@ -25,7 +25,7 @@
 		</div>
 		<div class="media-body post-body" style="margin-left: 0.75em">
 			<div class="article-metadata">
-				<a href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+				<a href="{% url 'user-posts' post.author.username %}" style="overflow-wrap: anywhere; inline-size: min-content">{{ post.author }}</a>
 		 		<p class="text-muted">{{ post.date_posted | timesince | upto:','}} ago</p>
 		    </div>
 			<h2 class="post-title"><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>

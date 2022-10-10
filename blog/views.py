@@ -6,7 +6,7 @@ from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
 from django.urls import reverse
-from django.db.models import Count
+from django.db.models import Count, Q
 
 from django.utils import timezone
 from math import log
@@ -138,7 +138,7 @@ def FollowUserView(request):
 		else:
 			user.profile.followers.add(request.user)
 			# add code to remove old notif w obj
-			notif = Notification.objects.create(notif_type=3, from_user=request.user, to_user=user)
+			notif = Notification.objects.create(notif_type=2, from_user=request.user, to_user=user)
 			unfollowed = False
 		# make return invalid instead of just using get_object_or_404
 		return JsonResponse({"valid": True, "unfollowed": unfollowed, "follow-count": user.profile.followers.count()}, status=200)
@@ -146,30 +146,62 @@ def FollowUserView(request):
 
 class PostListView(ListView):
 	model = Post
-	template_name = 'blog/home.html'
 	context_object_name = 'posts'
 	paginate_by = 5
+	default_sort = 'hot'
 
 	def get_queryset(self):
-		sort_type = self.request.GET.get('sort_type', 'new')
-
-		if sort_type == 'hot' or sort_type == 'controversial':
-			if sort_type == 'hot':
-				ordering = '-karma'
-			else:
-				ordering = 'karma'
-		else:
-			ordering = '-date_posted'
-
+		sort_type = self.request.GET.get('sort_type', self.default_sort)
 		return get_post_set(sort_type)
 
 	def get_context_data(self, **kwargs):
 		context = super(PostListView, self).get_context_data(**kwargs)
-		context['sort_type'] = self.request.GET.get('sort_type', 'new')
+		context['sort_type'] = self.request.GET.get('sort_type', self.default_sort)
 		context['user_count'] = User.objects.count()
 		return context
 
-def get_post_set(ordering, n_author=None):
+class TrendingListView(PostListView):
+	template_name = 'blog/home.html'
+
+class HomeListView(PostListView):
+	template_name = 'blog/home.html'
+	default_sort = 'new'
+
+	def get_queryset(self):
+		logged_in = self.request.user.is_authenticated
+		page_set = Post.objects
+
+		if logged_in:
+			page_set = page_set.filter(Q(author=self.request.user) | Q(author__profile__followers=self.request.user)).distinct()
+		else:
+			self.default_sort = 'hot'
+	
+		sort_type = self.request.GET.get('sort_type', self.default_sort)
+
+		return get_post_set(sort_type, page_set)
+
+class UserPostListView(PostListView):
+	template_name = 'blog/user_posts.html'
+	default_sort = 'new'
+
+	def get_queryset(self):
+		user = get_object_or_404(User, username=self.kwargs.get('username'))
+		sort_type = self.request.GET.get('sort_type', self.default_sort)
+		return get_post_set(sort_type, n_author=user)
+
+	def get_context_data(self, **kwargs):
+		context = super(UserPostListView, self).get_context_data(**kwargs)
+		user = get_object_or_404(User, username=self.kwargs.get('username'))
+		context['sort_type'] = self.request.GET.get('sort_type', 'new')
+		context['user_of_page'] = user
+		
+		return context
+
+def get_post_set(ordering, post_set=Post.objects, n_author=None):
+	base_set = post_set
+	if n_author != None:
+		base_set = base_set.filter(author=n_author)
+
 	if ordering == "top":
 		sort_type = "-karma"
 	elif ordering == "controversial":
@@ -181,7 +213,7 @@ def get_post_set(ordering, n_author=None):
 	elif ordering == "hot":
 		# trending alg here
 		post_dict = {}
-		for post in Post.objects.all():
+		for post in base_set.all():
 			# trending alg:
 			# (likes*0.5 + unique commenters) * (1/days_ago^2)
 			# just do number of comments for now, can do unique comments later
@@ -198,32 +230,9 @@ def get_post_set(ordering, n_author=None):
 			post_list.append(Post.objects.get(pk=post))
 		return post_list
 
-	base_set = Post.objects
-	if n_author != None:
-		base_set = base_set.filter(author=n_author)
 	if sort_type == "karma" or sort_type == "-karma":
 		base_set = base_set.annotate(karma=Count('likes')-Count('dislikes'))
 	return base_set.order_by(sort_type)
-
-class UserPostListView(ListView):
-	model = Post
-	template_name = 'blog/user_posts.html'
-	context_object_name = 'posts'
-	ordering = ['-date_posted']
-	paginate_by = 5
-
-	def get_queryset(self):
-		user = get_object_or_404(User, username=self.kwargs.get('username'))
-		sort_type = self.request.GET.get('sort_type', 'new')
-		return get_post_set(sort_type, user)
-
-	def get_context_data(self, **kwargs):
-		context = super(UserPostListView, self).get_context_data(**kwargs)
-		user = get_object_or_404(User, username=self.kwargs.get('username'))
-		context['sort_type'] = self.request.GET.get('sort_type', 'new')
-		context['user_of_page'] = user
-		
-		return context
 
 def get_post_list(n_sort_type=None, n_author=None):
 	sort_type = n_sort_type
@@ -309,6 +318,8 @@ def create_comment(request):
 			
 			responding_to = None
 			notif_author = True
+			if post.author == request.user:
+				notif_author = False
 
 			# Check if the comment starts with pinging a user
 			if content[0] == '@':
@@ -317,8 +328,9 @@ def create_comment(request):
 				if responding_to.exists():
 					responding_to = responding_to.first()
 					# notify them that you responded to their comment
-					notif = Notification.objects.create(notif_type=4, from_user=request.user, to_user=responding_to, post=post)
-					notif_author = True
+					if request.user != responding_to:
+						notif = Notification.objects.create(notif_type=4, from_user=request.user, to_user=responding_to, post=post)
+						notif_author = False
 				else:
 					responding_to = None
 			# Don't notify someone twice if they're both the parent comment author and within the thread
